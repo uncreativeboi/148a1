@@ -20,6 +20,8 @@ on it to fulfill all the given specifications.
 run: Run the main interactive loop.
 """
 
+from student import *
+
 
 def run():
     """ (NoneType) -> NoneType
@@ -29,9 +31,12 @@ def run():
 
     while True:
         command = input('')
+        split_command = command.split()
 
         if command == 'exit':
             break
+        elif split_command[0] == "create":
+            student = Student(split_command[2], "")
         else:
             print(command)
 
