@@ -40,6 +40,7 @@ class Stack:
 class Student:
     '''Represent students with names and the courses they are taking.'''
     def __init__(self, name):
+        # Check if student already exists
         if name in all_students:
             print("ERROR: Student {} already exists.".format(name))
         else:
@@ -52,8 +53,12 @@ class Student:
         #print(all_students[name].courses)
             
     def enrol(self, course):
-        self.courses.append(course)        
-        all_courses[course].append(self)
+        self.courses.append(course)
+        # Check if course exists, create course if not
+        if course in all_courses:        
+            all_courses[course].append(self)
+        else:
+            all_courses[course] = [self]
         print("success!")
         print(self.courses)
         print(all_courses)

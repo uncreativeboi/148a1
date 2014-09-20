@@ -29,8 +29,6 @@ def run():
     Run the main interactive loop.
     """
     
-    #all_students = []
-
     while True:
         command = input('')
         split_command = command.split()
