@@ -53,15 +53,45 @@ class Student:
         #print(all_students[name].courses)
             
     def enrol(self, course):
-        self.courses.append(course)
-        # Check if course exists, create course if not
-        if course in all_courses:        
-            all_courses[course].append(self)
-        else:
+        try:
+            # Check if student is already taking course
+            if course in self.courses:
+                print("{} is already taking {}!".format(self.name, course))
+            elif len(all_courses[course]) == 3: # change this later to 30!!!
+                print("ERROR: Course {} is full.".format(course))
+            else:
+                all_courses[course].append(self)
+                # Enrols student
+                self.courses.append(course)
+                print("success!")
+                
+        except KeyError:
             all_courses[course] = [self]
-        print("success!")
+            # Enrols student
+            self.courses.append(course)
+            print("success!")
+            
+            
         print(self.courses)
-        print(all_courses)
+        print(all_courses[course])
+        
+    def list_courses(self):
+        print("List all the courses!")
+        
+    def common_courses(self, student_2):
+        print("List a subset of all the courses!")
         
     def drop(self, course):
         self.courses.pop(self.courses.index(course))
+        
+def class_list(course):
+    print("Class list!")
+        
+'''class Course:
+    def __init__(self, course_code, student_list, course_size):
+        self.course_code = course_code
+        self.student_list = student_list
+        self.course_size = course_size
+    
+    def class_list(self):
+        print("Class list!")'''
