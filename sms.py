@@ -44,20 +44,28 @@ def run():
                 student = all_students[split_command[1]]
                 student.enrol(split_command[2])
             except KeyError:
-                print("ERROR: Student {} does not exist.".format(student_name))
+                print("ERROR: Student {} does not exist.".format(split_command[1]))
                 
         elif split_command[0] == 'drop':
             try:
                 student = all_students[split_command[1]]
                 student.drop(split_command[2])
             except KeyError:
-                print("ERROR: Student {} does not exist.".format(student_name))
+                print("ERROR: Student {} does not exist.".format(split_command[1]))
                 
         elif split_command[0] == 'list-courses':
             try:
                 all_students[split_command[1]].list_courses()
             except KeyError:
-                print("ERROR: Student {} does not exist.".format(student_name))
+                print("ERROR: Student {} does not exist.".format(split_command[1]))
+                
+        elif split_command[0] == 'common-courses':
+            try:
+                all_students[split_command[1]].common_courses(split_command[2])
+            except KeyError:
+                for i in range(1, 3):
+                    if not split_command[i] in all_students:
+                        print("ERROR: Student {} does not exist.".format(split_command[i]))
                 
         else:
             print("Unrecognized command!")

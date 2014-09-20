@@ -95,7 +95,11 @@ class Student:
             print("{} is taking {}.".format(self.name, nice_list_of_courses))
         
     def common_courses(self, student_2):
-        print("List a subset of all the courses!")
+        self_courses = self.courses
+        student_2_courses = all_students[student_2].courses
+        common_courses = list(set(self_courses) & set(student_2_courses))
+        print(', '.join(sorted(common_courses)))
+        
         
 def class_list(course):
     print("Class list!")
