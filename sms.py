@@ -44,6 +44,14 @@ def run():
                 student.enrol(split_command[2])
             except KeyError:
                 print("ERROR: Student {} does not exist.".format(student_name))
+        elif split_command[0] == 'drop':
+            student_name = split_command[1]
+            try:
+                student = all_students[student_name]
+                student.drop(split_command[2])
+            except KeyError:
+                print("ERROR: Student {} does not exist.".format(student_name))
+                
         else:
             print("Unrecognized command!")
             pass
