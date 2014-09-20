@@ -102,7 +102,14 @@ class Student:
         
         
 def class_list(course):
-    print("Class list!")
+    try:    
+        class_list = all_courses[course]
+        if len(class_list) == 0:
+            print("No one is taking {}.".format(course))
+        else:
+            print(', '.join(sorted(class_list)))
+    except KeyError:
+        print("Course does not exist!")
         
 '''class Course:
     def __init__(self, course_code, student_list, course_size):

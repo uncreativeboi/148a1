@@ -66,6 +66,9 @@ def run():
                 for i in range(1, 3):
                     if not split_command[i] in all_students:
                         print("ERROR: Student {} does not exist.".format(split_command[i]))
+                        
+        elif split_command[0] == 'class-list':
+            class_list(split_command[1])
                 
         else:
             print("Unrecognized command!")
