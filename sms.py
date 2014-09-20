@@ -7,7 +7,7 @@
 #
 # List your group members below, one per line, in format
 # <full name>, <utorid>
-#
+# Nguyen Binh Nguyen, nguye571
 #
 #
 # ---------------------------------------------
@@ -28,6 +28,8 @@ def run():
 
     Run the main interactive loop.
     """
+    
+    #all_students = []
 
     while True:
         command = input('')
@@ -35,11 +37,19 @@ def run():
 
         if command == 'exit':
             break
-        elif split_command[0] == "create":
-            student = Student(split_command[2], "")
+        elif split_command[0] == 'create':
+            Student(split_command[2])
+        elif split_command[0] == 'enrol':
+            student_name = split_command[1]
+            try:
+                student = all_students[student_name]
+                student.enrol(split_command[2])
+            except KeyError:
+                print("ERROR: Student {} does not exist.".format(student_name))
         else:
-            print(command)
-
+            print("Unrecognized command!")
+            pass
+    
 
 if __name__ == '__main__':
     run()
