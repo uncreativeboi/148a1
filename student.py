@@ -88,7 +88,11 @@ class Student:
         #print(all_courses[course])
         
     def list_courses(self):
-        print("List all the courses!")
+        if len(self.courses) == 0:
+            print("{} is not taking any courses.".format(self.name))
+        else:
+            nice_list_of_courses = ', '.join(sorted(self.courses))
+            print("{} is taking {}.".format(self.name, nice_list_of_courses))
         
     def common_courses(self, student_2):
         print("List a subset of all the courses!")

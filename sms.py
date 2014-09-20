@@ -35,20 +35,27 @@ def run():
 
         if command == 'exit':
             break
+        
         elif split_command[0] == 'create':
             Student(split_command[2])
+            
         elif split_command[0] == 'enrol':
-            student_name = split_command[1]
             try:
-                student = all_students[student_name]
+                student = all_students[split_command[1]]
                 student.enrol(split_command[2])
             except KeyError:
                 print("ERROR: Student {} does not exist.".format(student_name))
+                
         elif split_command[0] == 'drop':
-            student_name = split_command[1]
             try:
-                student = all_students[student_name]
+                student = all_students[split_command[1]]
                 student.drop(split_command[2])
+            except KeyError:
+                print("ERROR: Student {} does not exist.".format(student_name))
+                
+        elif split_command[0] == 'list-courses':
+            try:
+                all_students[split_command[1]].list_courses()
             except KeyError:
                 print("ERROR: Student {} does not exist.".format(student_name))
                 
