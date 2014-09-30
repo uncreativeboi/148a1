@@ -17,8 +17,8 @@ TODO: fill in this doctring with information about your
 class(es)!
 """
 
-all_students = {}
-all_courses = {}
+all_students = {} # {name: std_obj}
+all_courses = {'csc': ['a', 'b', 'c']} # {'course_code': [students]}
 
 class Stack:
     def __init__(self):
@@ -50,10 +50,10 @@ class Student:
             self.name = name
             self.courses = []
             all_students[name] = self
-            history.push(command)
+            history.push('create student {}'.format(name))
         
-        print(all_students)
-        print(all_students[name].name)
+        #print(all_students)
+        #print(all_students[name].name)
         #print(all_students[name].courses)
     
     def delete(self):
@@ -63,41 +63,36 @@ class Student:
         try:
             # Check if student is already taking course
             if course in self.courses:
-                print("{} is already taking {}!".format(self.name, course))
                 history.push('')
             elif len(all_courses[course]) == 30:
-                print("ERROR: Course {} is full.".format(course))
+                print('ERROR: Course {} is full.'.format(course))
                 history.push('')
             else:
                 all_courses[course].append(self.name)
                 # Enrols student
                 self.courses.append(course)
-                print("success!")
-                history.push(command)
+                history.push('enrol {} {}'.format(self.name, course))
                 
         except KeyError:
             all_courses[course] = [self.name]
             # Enrols student
             self.courses.append(course)
-            print("success!")
+            history.push('enrol {} {}'.format(self.name, course))
             
-        print(self.courses)
-        print(all_courses[course])
+        #print(self.courses)
+        #print(all_courses[course])
         
     def drop(self, course):
         if not course in all_courses:
-            print("course does not exist!")
             history.push('')
         elif course in self.courses:
             self.courses.remove(course)
             all_courses[course].remove(self.name)
-            print("success!")
-            history.push(command)
+            history.push('drop {} {}'.format(self.name, course))
         else:
-            print("{} not taking {}!".format(self.name, course))
             history.push('')
             
-        print(self.courses)
+        #print(self.courses)
         #print(all_courses[course])
         
     def list_courses(self):
@@ -122,27 +117,31 @@ def class_list(course):
         else:
             print(', '.join(sorted(class_list)))
     except KeyError:
-        print("Course does not exist!")
+        pass
         
         
-def undo():
-    if history.is_empty():
-        print('ERROR: No commands to undo.')
-    else:    
-        command = history.pop()
-        if command == '':
-            pass
-        else:
-            split_command = command.split()
-            if split_command[0] == 'create':
-                student = all_students[split_command[2]]
-                student.delete()
-            elif split_command[0] == 'enrol':
-                student = all_students[split_command[1]]
-                student.drop(split_command[2])
-            elif split_command[0] == 'drop':
-                student = all_students[split_command[1]]
-                student.enrol(split_command[2])
+def undo(n):
+    for i in range(n):
+        if history.is_empty():
+            print('ERROR: No commands to undo.')
+            break
+        else:   
+            command = history.pop()
+            if command == '':
+                pass
+            else:
+                split_command = command.split()
+                if split_command[0] == 'create':
+                    student = all_students[split_command[2]]
+                    student.delete()
+                elif split_command[0] == 'enrol':
+                    student = all_students[split_command[1]]
+                    student.drop(split_command[2])
+                    history.pop()
+                elif split_command[0] == 'drop':
+                    student = all_students[split_command[1]]
+                    student.enrol(split_command[2])
+                    history.pop()
         
 '''class Course:
     def __init__(self, course_code, student_list, course_size):
