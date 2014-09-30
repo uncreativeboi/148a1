@@ -22,7 +22,6 @@ run: Run the main interactive loop.
 
 from student import *
 
-
 def run():
     """ (NoneType) -> NoneType
 
@@ -45,6 +44,7 @@ def run():
                 student.enrol(split_command[2])
             except KeyError:
                 print("ERROR: Student {} does not exist.".format(split_command[1]))
+                history.push('')
                 
         elif split_command[0] == 'drop':
             try:
@@ -52,12 +52,14 @@ def run():
                 student.drop(split_command[2])
             except KeyError:
                 print("ERROR: Student {} does not exist.".format(split_command[1]))
+                history.push('')
                 
         elif split_command[0] == 'list-courses':
             try:
                 all_students[split_command[1]].list_courses()
             except KeyError:
                 print("ERROR: Student {} does not exist.".format(split_command[1]))
+            history.push('')
                 
         elif split_command[0] == 'common-courses':
             try:
@@ -66,13 +68,22 @@ def run():
                 for i in range(1, 3):
                     if not split_command[i] in all_students:
                         print("ERROR: Student {} does not exist.".format(split_command[i]))
+            history.push('')
                         
         elif split_command[0] == 'class-list':
             class_list(split_command[1])
+            history.push('')
+            
+        elif split_command[0] == 'undo':
+            if len(split_command) == 1:
+                undo()
+            elif len(split_command) == 2:
+                for i in range(int(split_command[1])):
+                    undo()
                 
         else:
             print("Unrecognized command!")
-            pass
+            history.push('')
     
 
 if __name__ == '__main__':

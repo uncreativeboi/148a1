@@ -37,33 +37,43 @@ class Stack:
         '''(Stack, object) -> NoneType'''
         self.items.append(item)
 
+history = Stack()
+
 class Student:
     '''Represent students with names and the courses they are taking.'''
     def __init__(self, name):
         # Check if student already exists
         if name in all_students:
             print("ERROR: Student {} already exists.".format(name))
+            history.push('')
         else:
             self.name = name
             self.courses = []
             all_students[name] = self
+            history.push(command)
         
         print(all_students)
         print(all_students[name].name)
         #print(all_students[name].courses)
+    
+    def delete(self):
+        del all_students[self.name]
             
     def enrol(self, course):
         try:
             # Check if student is already taking course
             if course in self.courses:
                 print("{} is already taking {}!".format(self.name, course))
+                history.push('')
             elif len(all_courses[course]) == 30:
                 print("ERROR: Course {} is full.".format(course))
+                history.push('')
             else:
                 all_courses[course].append(self.name)
                 # Enrols student
                 self.courses.append(course)
                 print("success!")
+                history.push(command)
                 
         except KeyError:
             all_courses[course] = [self.name]
@@ -77,12 +87,15 @@ class Student:
     def drop(self, course):
         if not course in all_courses:
             print("course does not exist!")
+            history.push('')
         elif course in self.courses:
             self.courses.remove(course)
             all_courses[course].remove(self.name)
             print("success!")
+            history.push(command)
         else:
             print("{} not taking {}!".format(self.name, course))
+            history.push('')
             
         print(self.courses)
         #print(all_courses[course])
@@ -110,6 +123,26 @@ def class_list(course):
             print(', '.join(sorted(class_list)))
     except KeyError:
         print("Course does not exist!")
+        
+        
+def undo():
+    if history.is_empty():
+        print('ERROR: No commands to undo.')
+    else:    
+        command = history.pop()
+        if command == '':
+            pass
+        else:
+            split_command = command.split()
+            if split_command[0] == 'create':
+                student = all_students[split_command[2]]
+                student.delete()
+            elif split_command[0] == 'enrol':
+                student = all_students[split_command[1]]
+                student.drop(split_command[2])
+            elif split_command[0] == 'drop':
+                student = all_students[split_command[1]]
+                student.enrol(split_command[2])
         
 '''class Course:
     def __init__(self, course_code, student_list, course_size):
