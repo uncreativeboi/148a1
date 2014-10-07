@@ -18,7 +18,7 @@ class(es)!
 """
 
 all_students = {} # {name: std_obj}
-all_courses = {'csc': ['a', 'b', 'c']} # {'course_code': [students]}
+all_courses = {} # {'course_code': [students]}
 
 class Stack:
     def __init__(self):
@@ -143,6 +143,10 @@ def undo(n):
                     student.enrol(split_command[2])
                     history.pop()
         
+def exit_sms():
+    all_courses.clear()
+    all_students.clear()
+
 '''class Course:
     def __init__(self, course_code, student_list, course_size):
         self.course_code = course_code

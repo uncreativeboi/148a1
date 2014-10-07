@@ -33,6 +33,7 @@ def run():
         split_command = command.split()
 
         if command == 'exit':
+            exit_sms()            
             break
         
         elif split_command[0] == 'undo':
