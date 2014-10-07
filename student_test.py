@@ -19,7 +19,7 @@ Note that you should not have any tests involving
 standard input or output in here.
 """
 import unittest
-import student
+from student import *
 
 # Assignment 1 - Sample unit tests
 #
@@ -42,7 +42,37 @@ from sms import run
 
 
 class TestStudent(unittest.TestCase):
-    pass
+    def setUp(self):
+        self.out = StringIO('')
+        
+        
+    def tearDown(self):
+        exit_sms()
+    
+    def test_create_student(self):
+        student = Student('nick')
+        self.assertEqual(student.name, 'nick')
+        
+    #def test_create_student_duplicate(self):
+        #Student('nina')
+        #Student('nina')
+        #self.out = StringIO('')
+        #sys.stdout = self.out
+        #self.assertEqual(self.out.getvalue(), 'ERROR: Student nina already exists.')
+        
+    def test_enrol(self):
+        nina = Student('nina')
+        nina.enrol('CSC148')
+        self.assertEqual(nina.courses, ['CSC148'])
+        
+    def test_drop(self):
+        nina = Student('nina')
+        nina.enrol('CSC148')
+        nina.drop('CSC148')
+        self.assertEqual(nina.courses, [])
+        
+class TestEnrol(TestStudent):
+    #tests here
 
 if __name__ == '__main__':
     unittest.main(exit=False)
