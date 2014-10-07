@@ -100,7 +100,7 @@ class Student:
             print("{} is not taking any courses.".format(self.name))
         else:
             nice_list_of_courses = ', '.join(sorted(self.courses))
-            print("{} is taking {}.".format(self.name, nice_list_of_courses))
+            print("{} is taking {}".format(self.name, nice_list_of_courses))
         
     def common_courses(self, student_2):
         self_courses = self.courses
@@ -117,7 +117,7 @@ def class_list(course):
         else:
             print(', '.join(sorted(class_list)))
     except KeyError:
-        pass
+        print("No one is taking {}.".format(course))
         
         
 def undo(n):
@@ -146,6 +146,8 @@ def undo(n):
 def exit_sms():
     all_courses.clear()
     all_students.clear()
+    while not history.is_empty():
+        history.pop()
 
 '''class Course:
     def __init__(self, course_code, student_list, course_size):
