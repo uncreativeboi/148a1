@@ -63,6 +63,9 @@ class TestSMS(unittest.TestCase):
     def test_simple(self):
         self.io_tester(['exit'], [''])
         
+    def test_empty_command(self):
+        self.io_tester(['', 'exit'], ['Unrecognized command!', ''])
+        
     def test_enrol_error(self):
         self.io_tester(['enrol nick csc', 'exit'],
                        [self.error_nick, ''])
