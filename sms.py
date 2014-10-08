@@ -28,6 +28,7 @@ def run():
     Run the main interactive loop.
     """
 
+    database = Database()
     all_students = {}
     all_courses = {}
     history = History()
@@ -44,22 +45,20 @@ def run():
             history.push('')
         
         elif split_command[0] == 'undo':
-            undo(split_command, all_students, all_courses, history)
+            undo(split_command, database, history)
                 
         elif len(split_command) == 3:
             if split_command[0] == 'create':
-                create_student(split_command[2], all_students, history)
+                create_student(split_command[2], database, history)
                     
             elif split_command[0] == 'enrol':
-                enrol(split_command[1], split_command[2], all_students, \
-                      all_courses, history)
+                enrol(split_command[1], split_command[2], database, history)
                 
             elif split_command[0] == 'drop':
-                drop(split_command[1], split_command[2], all_students, \
-                      all_courses, history)
+                drop(split_command[1], split_command[2], database, history)
                 
             elif split_command[0] == 'common-courses':
-                common_courses(split_command, all_students, history)
+                common_courses(split_command, database, history)
             
             else:
                 print('Unrecognized command!')
@@ -67,10 +66,10 @@ def run():
                         
         elif len(split_command) == 2:
             if split_command[0] == 'list-courses':
-                list_courses(split_command[1], all_students, history)
+                list_courses(split_command[1], database, history)
                     
             elif split_command[0] == 'class-list':
-                class_list(split_command[1], all_courses, history)
+                class_list(split_command[1], database, history)
             
             else:
                 print("Unrecognized command!")
@@ -80,22 +79,18 @@ def run():
             print("Unrecognized command!")
             history.push('')
                 
-def create_student(student_name, all_students, history):
+def create_student(student_name, database, history):
     try:                
-        Student(student_name, all_students)
+        Student(student_name, database)
         history.push('create student {}'.format(student_name))
     except DuplicateStudentError:
         print('ERROR: Student {} already exists.'.format(student_name))
         history.push('')    
 
-def enrol(student_name, course_code, all_students, all_courses, history):
+def enrol(student_name, course_code, database, history):
     try:
-        student_object = all_students[student_name]
-        try:
-            course_object = all_courses[course_code]
-        except KeyError:
-            course_object = Course(course_code)
-            all_courses[course_code] = course_object
+        student_object = database.get_student_object(student_name)
+        course_object = database.get_course_object(course_code)
             
         try:
             student_object.enrol(course_code, course_object)
@@ -106,63 +101,57 @@ def enrol(student_name, course_code, all_students, all_courses, history):
         except AlreadyTakingCourseError: 
             history.push('')
             
-    except KeyError:
+    except NonExistentStudentError:
         print("ERROR: Student {} does not exist.".format(student_name))
         history.push('')
 
-def drop(student_name, course_code, all_students, all_courses, history):
+def drop(student_name, course_code, database, history):
     try:
-        student_object = all_students[student_name]
-        try:
-            course_object = all_courses[course_code]
-        except KeyError:
-            course_object = Course(course_code)
-            all_courses[course_code] = course_object
+        student_object = database.get_student_object(student_name)
+        course_object = database.get_course_object(course_code)
             
         try:
-            course_object = all_courses[course_code]
             student_object.drop(course_code, course_object)
             history.push('drop {} {}'.format(student_name, course_code))
         except NotTakingCourseError:
             history.push('')
             
-    except KeyError:
+    except NonExistentStudentError:
         print("ERROR: Student {} does not exist.".format(student_name))
         history.push('')
         
-def list_courses(student_name, all_students, history):
+def list_courses(student_name, database, history):
     try:
-        student_object = all_students[student_name]
+        student_object = database.get_student_object(student_name)
         print(student_object.list_courses())
-    except KeyError:
+    except NonExistentStudentError:
         print("ERROR: Student {} does not exist.".format(student_name))
     history.push('')    
 
-def common_courses(split_command, all_students, history):
+def common_courses(split_command, database, history):
     try:
-        student_1_object = all_students[split_command[1]]
-        student_2_object = all_students[split_command[2]]
+        student_1_object = database.get_student_object(split_command[1])
+        student_2_object = database.get_student_object(split_command[2])
         print(student_1_object.common_courses(student_2_object))
-    except KeyError:
+    except NonExistentStudentError:
         for i in range(1, 3):
-            if not split_command[i] in all_students:
+            try:
+                database.get_student_object(split_command[i])
+            except NonExistentStudentError:
                 print("ERROR: Student {} does not exist.".format(split_command[i]))
     history.push('')
     
-def class_list(course_code, all_courses, history):
-    try:
-        course_object = all_courses[course_code]
-        print(course_object.class_list())
-    except KeyError:
-        print("No one is taking {}.".format(course_code))
+def class_list(course_code, database, history):
+    course_object = database.get_course_object(course_code)
+    print(course_object.class_list())
     history.push('')
     
-def undo(split_command, all_students, all_courses, history):
+def undo(split_command, database, history):
     try:
         if len(split_command) == 1:
-            history.undo(1, all_students, all_courses)
+            history.undo(1, database)
         elif len(split_command) == 2:
-            history.undo(split_command[1], all_students, all_courses)
+            history.undo(split_command[1], database)
         else:
             print("Unrecognized command!")
             history.push('')

@@ -23,6 +23,9 @@ class DuplicateStudentError(Exception):
     def __str__(self, student_name):
         return 'ERROR: Student {} already exists.'.format(student_name)
     
+class NonExistentStudentError(Exception):
+    pass
+    
 class FullCourseError(Exception):
     def __str__(self, course_code):
         return 'ERROR: Course {} is full.'.format(course_code)
@@ -52,16 +55,42 @@ class Stack:
     def push(self, item):
         '''(Stack, object) -> NoneType'''
         self.items.append(item)
+        
+class Database:
+    def __init__(self):
+        self.student_database = {}
+        self.courses_database = {}
+        
+    def push_student(self, student_name, student_object):
+        self.student_database[student_name] = student_object
+        
+    def delete_student(self, student_name):
+        del self.student_database[student_name]
+        
+    def get_student_object(self, student_name):
+        try:
+            return self.student_database[student_name]
+        except KeyError:
+            raise NonExistentStudentError
+        
+    def get_course_object(self, course_code):
+        try:
+            return self.courses_database[course_code]
+        except KeyError:
+            course_object = Course(course_code)
+            self.courses_database[course_code] = course_object
+            return course_object
 
 class Student:
     '''Represent students with names and the courses they are taking.'''
-    def __init__(self, student_name, all_students):
-        if student_name in all_students:
+    def __init__(self, student_name, database):
+        try:
+            database.get_student_object(student_name)
             raise DuplicateStudentError
-        else:    
+        except NonExistentStudentError:    
             self.student_name = student_name
             self.courses = []
-            all_students[student_name] = self
+            database.push_student(self.student_name, self)
         
     def enrol(self, course_code, course_object):
         if course_object.is_full():
@@ -124,10 +153,9 @@ class History:
     def push(self, command):
         return self.history.push(command)
         
-    def undo(self, n, all_students, all_courses):
+    def undo(self, n, database):
         if type(n) != int:
             n = int(n)
-            
         if n <= 0:
             raise ValueError
         
@@ -140,11 +168,11 @@ class History:
                 if command == '':
                     pass
                 elif split_command[0] == 'create':
-                    del all_students[split_command[2]]
+                    database.delete_student(split_command[2])
                 else:
-                    student_object = all_students[split_command[1]]
+                    student_object = database.get_student_object(split_command[1])
                     course_code = split_command[2]
-                    course_object = all_courses[course_code]
+                    course_object = database.get_course_object(course_code)
                     if split_command[0] == 'enrol':
                         student_object.drop(course_code, course_object)
                     elif split_command[0] == 'drop':
