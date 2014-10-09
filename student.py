@@ -83,14 +83,9 @@ class Database:
 
 class Student:
     '''Represent students with names and the courses they are taking.'''
-    def __init__(self, student_name, database):
-        try:
-            database.get_student_object(student_name)
-            raise DuplicateStudentError
-        except NonExistentStudentError:    
-            self.student_name = student_name
-            self.courses = []
-            database.push_student(self.student_name, self)
+    def __init__(self, student_name):
+        self.student_name = student_name
+        self.courses = []
         
     def enrol(self, course_code, course_object):
         if course_object.is_full():

@@ -29,8 +29,6 @@ def run():
     """
 
     database = Database()
-    all_students = {}
-    all_courses = {}
     history = History()
     
     while True:
@@ -81,11 +79,12 @@ def run():
                 
 def create_student(student_name, database, history):
     try:                
-        Student(student_name, database)
-        history.push('create student {}'.format(student_name))
-    except DuplicateStudentError:
+        database.get_student_object(student_name)
         print('ERROR: Student {} already exists.'.format(student_name))
         history.push('')    
+    except NonExistentStudentError:
+        database.push_student(student_name, Student(student_name))
+        history.push('create student {}'.format(student_name))
 
 def enrol(student_name, course_code, database, history):
     try:
