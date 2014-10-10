@@ -98,7 +98,8 @@ class Database:
 
     def delete_student(self, student_name):
         '''(Database, str) -> NoneType
-        Delete a student from the database.
+        Delete a student from the database. Used for undoing the create
+        command.
 
         Paramaters:
         - student_name: name of student, the key containing this name
@@ -169,6 +170,7 @@ class Student:
     def enrol(self, course_code, course_object):
         '''(Student, str, Course) -> NoneType
         Enrol student into a course.
+        Raise errors if course is full or already enrolled.
 
         Parameters:
         - course_code: the course code to be added to the list of courses.
@@ -298,6 +300,7 @@ class History:
 
     Attributes:
     - self.history (Stack): a stack with the commands entered.'''
+
     def __init__(self):
         '''(History) -> NoneType
         Create a History object with a command stack.'''
@@ -322,6 +325,7 @@ class History:
         - n: number of commands to undo.
         - database: the database to execute undo commands on.
         '''
+
         if type(n) != int:
             n = int(n)
         if n <= 0:
