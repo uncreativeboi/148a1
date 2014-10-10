@@ -8,7 +8,7 @@
 # List your group members below, one per line, in format
 # <full name>, <utorid>
 # Nguyen Binh Nguyen, nguye571
-#
+# 
 #
 # ---------------------------------------------
 """Interactive console for assignment.

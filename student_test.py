@@ -43,33 +43,12 @@ from sms import run
 
 class TestStudent(unittest.TestCase):
     def setUp(self):
-        self.out = StringIO('')
-        
+        pass
         
     def tearDown(self):
-        exit_sms()
+        pass
     
-    def test_create_student(self):
-        student = Student('nick')
-        self.assertEqual(student.name, 'nick')
-        
-    #def test_create_student_duplicate(self):
-        #Student('nina')
-        #Student('nina')
-        #self.out = StringIO('')
-        #sys.stdout = self.out
-        #self.assertEqual(self.out.getvalue(), 'ERROR: Student nina already exists.')
-        
-    def test_enrol(self):
-        nina = Student('nina')
-        nina.enrol('CSC148')
-        self.assertEqual(nina.courses, ['CSC148'])
-        
-    def test_drop(self):
-        nina = Student('nina')
-        nina.enrol('CSC148')
-        nina.drop('CSC148')
-        self.assertEqual(nina.courses, [])
+    def 
         
 class TestEnrol(TestStudent):
     #tests here
