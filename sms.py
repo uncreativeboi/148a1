@@ -8,8 +8,8 @@
 # List your group members below, one per line, in format
 # <full name>, <utorid>
 # Nguyen Binh Nguyen, nguye571
-#
-#
+# Tingting Wang, wangtin8
+# Nadeem Merali, meralina
 # ---------------------------------------------
 """Interactive console for assignment.
 
@@ -46,33 +46,28 @@ def run():
         elif split_command[0] == 'undo':
             undo(split_command, database, history)
 
-        elif len(split_command) == 3:
-            if split_command[0] == 'create':
-                create_student(split_command[2], database, history)
+        elif split_command[0] == 'create' \
+           and split_command[1] == 'student'\
+           and len(split_command) == 3:
+            create_student(split_command[2], database, history)
 
-            elif split_command[0] == 'enrol':
-                enrol(split_command[1], split_command[2], database, history)
+        elif split_command[0] == 'enrol' and len(split_command) == 3:
+            enrol(split_command[1], split_command[2], database, history)
 
-            elif split_command[0] == 'drop':
-                drop(split_command[1], split_command[2], database, history)
+        elif split_command[0] == 'drop' and len(split_command) == 3:
+            drop(split_command[1], split_command[2], database, history)
 
-            elif split_command[0] == 'common-courses':
-                common_courses(split_command, database, history)
+        elif split_command[0] == 'common-courses' \
+             and len(split_command) == 3:
+            common_courses(split_command, database, history)
 
-            else:
-                print('Unrecognized command!')
-                history.push('')
+        elif split_command[0] == 'list-courses' \
+           and len(split_command) == 2:
+            list_courses(split_command[1], database, history)
 
-        elif len(split_command) == 2:
-            if split_command[0] == 'list-courses':
-                list_courses(split_command[1], database, history)
-
-            elif split_command[0] == 'class-list':
-                class_list(split_command[1], database, history)
-
-            else:
-                print("Unrecognized command!")
-                history.push('')
+        elif split_command[0] == 'class-list' \
+             and len(split_command) == 2:
+            class_list(split_command[1], database, history)
 
         else:
             print("Unrecognized command!")
@@ -176,7 +171,7 @@ def list_courses(student_name, database, history):
 
 
 def common_courses(split_command, database, history):
-    '''(str, Database, History) -> NoneType
+    '''(list of str, Database, History) -> NoneType
     Print a list of common courses two students are taking.
 
     Parameters:
@@ -215,7 +210,7 @@ def class_list(course_code, database, history):
 
 
 def undo(split_command, database, history):
-    '''(str, Database, History) -> NoneType
+    '''(list of str, Database, History) -> NoneType
     Undo commands.
 
     Parameters:

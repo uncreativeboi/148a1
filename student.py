@@ -8,8 +8,8 @@
 # List your group members below, one per line, in format
 # <full name>, <utorid>
 # Nguyen Binh Nguyen, nguye571
-#
-#
+# Tingting Wang, wangtin8
+# Nadeem Merali, meralina
 # ---------------------------------------------
 """The back-end data model for the program.
 
@@ -21,26 +21,38 @@ class(es)!
 
 
 class DuplicateStudentError(Exception):
+    '''Exception used when a student exists in database.'''
+
     pass
 
 
 class NonExistentStudentError(Exception):
+    '''Exception used when a student does not exist in database.'''
+
     pass
 
 
 class FullCourseError(Exception):
+    '''Exception used when a course is full.'''
+
     pass
 
 
 class AlreadyTakingCourseError(Exception):
+    '''Exception used when the student is already taking the course.'''
+
     pass
 
 
 class NotTakingCourseError(Exception):
+    '''Exception used when the student is not taking the course.'''
+
     pass
 
 
 class EndOfHistoryError(Exception):
+    '''Exception used when there are no more commands in history stack.'''
+
     pass
 
 

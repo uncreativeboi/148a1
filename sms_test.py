@@ -134,6 +134,11 @@ class TestSMS(unittest.TestCase):
                        ['common-courses nick nina', 'exit'],
                        ['CSC148, RSM423', ''])
 
+    def test_common_courses_no_courses(self):
+        self.io_tester(self.create_nick_with_5_courses + \
+                       ['create student nina', 'common-courses nick nina', 'exit'],
+                       ['', ''])
+
     def test_common_courses_no_1(self):
         self.io_tester(['create student nick', 'common-courses nick nina', 'exit'],
                        [self.error_nina, ''])
